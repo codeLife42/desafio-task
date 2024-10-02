@@ -59,14 +59,33 @@ export const routes = [
       const content = req.body;
 
       if (content.title !== undefined) {
-        dataBase.update("tasks", id, "title", content.title);
-        return res.end("Tarefa atualizada");
+        if (dataBase.update("tasks", id, "title", content.title)) {
+          return res.end("Tarefa atualizada");
+        }
+
+        return res.end("Tarefa nao encontrada");
       } else if (content.description !== undefined) {
-        dataBase.update("tasks", id, "description", content.description);
-        return res.end("Tarefa atualizada");
+        if (dataBase.update("tasks", id, "description", content.description)) {
+          return res.end("Tarefa atualizada");
+        }
+
+        return res.end("Tarefa nao encontrada");
       }
 
       return res.end("Tarefa nao atualizada, erro ao buscar dados");
+    },
+  },
+  {
+    method: "PATCH",
+    path: buildRoutePath("/tasks/:id/complete"),
+    handler: (req, res) => {
+      const id = req.params.id;
+
+      if (dataBase.patch("tasks", id)) {
+        return res.end("Tarefa concluida");
+      } else {
+        return res.end("Tarefa nao encontrada!");
+      }
     },
   },
 ];

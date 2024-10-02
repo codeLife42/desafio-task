@@ -58,12 +58,29 @@ export class Database {
 
     if (index !== -1 && typeOfContent === "title") {
       this.#database[table][index].title = content;
+      this.#database[table][index].updated_at = Date();
       this.#persist();
       return true;
     }
 
     if (index !== -1 && typeOfContent === "description") {
       this.#database[table][index].description = content;
+      this.#database[table][index].updated_at = Date();
+      this.#persist();
+      return true;
+    }
+
+    return false;
+  }
+
+  patch(table, idToUpdate) {
+    const index = this.#database[table]?.findIndex(
+      (task) => task.id === idToUpdate
+    );
+
+    if (index !== -1) {
+      this.#database[table][index].completed_at = Date();
+      this.#database[table][index].updated_at = Date();
       this.#persist();
       return true;
     }
